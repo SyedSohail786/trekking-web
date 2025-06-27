@@ -1,0 +1,34 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const dotenv = require("dotenv");
+
+dotenv.config();
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+const districtRoutes = require("./App/Routes/districtRoutes");
+const trekRoutes = require("./App/Routes/trekRoutes");
+const slotRoutes = require("./App/Routes/slotRoutes");
+const adminAuth = require("./App/Routes/adminAuth");
+const messageRoutes = require("./App/Routes/messageRoutes");
+const bookingRoutes = require("./App/Routes/bookingRoutes");
+
+app.use("/api/districts", districtRoutes);
+app.use("/api/treks", trekRoutes);
+app.use("/api/slots", slotRoutes);
+app.use("/api/admin", adminAuth);
+app.use("/api/messages", messageRoutes);
+app.use("/api/bookings", bookingRoutes);
+
+// DB Connect
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB connected");
+    app.listen(process.env.PORT, () => console.log("Server running",process.env.PORT));
+  })
+  .catch((err) => console.error(err));

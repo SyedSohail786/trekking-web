@@ -17,13 +17,19 @@ const slotRoutes = require("./App/Routes/slotRoutes");
 const adminAuth = require("./App/Routes/adminAuth");
 const messageRoutes = require("./App/Routes/messageRoutes");
 const bookingRoutes = require("./App/Routes/bookingRoutes");
+const uploadRoutes = require("./App/Routes/uploadRoutes");
+const placeRoutes = require("./App/Routes/placeRoutes");
 
+
+app.use("/uploads", express.static("uploads"));
 app.use("/api/districts", districtRoutes);
 app.use("/api/treks", trekRoutes);
 app.use("/api/slots", slotRoutes);
 app.use("/api/admin", adminAuth);
 app.use("/api/messages", messageRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api/places", placeRoutes);
 
 // DB Connect
 mongoose.connect(process.env.MONGO_URI)

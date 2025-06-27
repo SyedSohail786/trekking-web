@@ -63,6 +63,11 @@ const Navbar = ({ isAdmin, onLogout }) => {
                   Inbox
                 </Link>
               </li>
+              <li>
+                <Link to="/admin/addPlace" className="hover:text-yellow-200 transition-colors font-medium">
+                  Manage Trekks
+                </Link>
+              </li>
               <button
                 onClick={handleLogoutClick}
                 className="text-red-300 hover:text-red-200 transition-colors font-medium"

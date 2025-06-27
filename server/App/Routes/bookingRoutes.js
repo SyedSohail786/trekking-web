@@ -30,4 +30,14 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    const bookings = await Booking.find()
+      .populate("trekId", "name")
+      .populate("slotId", "date time capacity");
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch bookings" });
+  }
+});
 module.exports = router; // ✅ this is very important

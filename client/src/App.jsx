@@ -17,8 +17,9 @@ import AdminLogin from "./Components/AdminLogin";
 import AdminDashboard from "./Components/AdminDashboard";
 import { ToastContainer } from "react-toastify";
 import PopularTrek from "./Components/PopularTrek";
-import TrekDetail from "./Components/trekDetails";
+import TrekDetail from "./Components/TrekDetails";
 import Visitors from "./Components/Visitors";
+import AddPlace from "./Components/addPlace";
 
 function App() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
@@ -89,6 +90,12 @@ function App() {
             path="/admin/visitors"
             element={
               isAdminLoggedIn ? <Visitors /> : <Navigate to="/admin" />
+            }
+          />
+          <Route
+            path="/admin/addPlace"
+            element={
+              isAdminLoggedIn ? <AddPlace /> : <Navigate to="/admin" />
             }
           />
         </Routes>

@@ -1,0 +1,6 @@
+#Basic Files
+node_modules
+.env.local
+.env.development
+.env.production
+.env

@@ -16,6 +16,9 @@ import Inbox from "./Pages/Inbox";
 import AdminLogin from "./Components/AdminLogin";
 import AdminDashboard from "./Components/AdminDashboard";
 import { ToastContainer } from "react-toastify";
+import PopularTrek from "./Components/PopularTrek";
+import TrekDetail from "./Components/trekDetails";
+import Visitors from "./Components/Visitors";
 
 function App() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
@@ -45,12 +48,15 @@ function App() {
               <>
                 <HeroCarousel />
                 <TrekSearch />
+                <PopularTrek/>
               </>
             }
           />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/availability" element={<Availability />} />
+          <Route path="/trek/:id" element={<TrekDetail />} />
+          
 
           {/* Admin Routes */}
           <Route
@@ -77,6 +83,12 @@ function App() {
             path="/admin/inbox"
             element={
               isAdminLoggedIn ? <Inbox /> : <Navigate to="/admin" />
+            }
+          />
+          <Route
+            path="/admin/visitors"
+            element={
+              isAdminLoggedIn ? <Visitors /> : <Navigate to="/admin" />
             }
           />
         </Routes>

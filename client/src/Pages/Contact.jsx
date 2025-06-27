@@ -19,7 +19,7 @@ const Contact = () => {
     try {
       const res = await axios.post("http://localhost:8000/api/messages", form);
       alert(res.data.message);
-      setForm({ name: "", email: "", message: "" });
+      setForm({ name: "", email: "", message: "", phone: "" });
     } catch (err) {
       alert("Failed to send message");
     }
@@ -42,6 +42,15 @@ const Contact = () => {
           name="email"
           placeholder="Your Email"
           value={form.email}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="phone"
+          name="phone"
+          placeholder="Your Phone"
+          value={form.phone}
+          maxLength={10}
           onChange={handleChange}
           className="w-full p-2 border rounded"
         />

@@ -54,6 +54,11 @@ const Navbar = ({ isAdmin, onLogout }) => {
                 </Link>
               </li>
               <li>
+                <Link to="/admin/visitors" className="hover:text-yellow-200 transition-colors font-medium">
+                  Visitors
+                </Link>
+              </li>
+              <li>
                 <Link to="/admin/inbox" className="hover:text-yellow-200 transition-colors font-medium">
                   Inbox
                 </Link>

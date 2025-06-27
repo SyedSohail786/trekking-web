@@ -6,8 +6,8 @@ const Message = require("../Models/Message");
 // POST: Save message
 router.post("/", async (req, res) => {
   try {
-    const { name, email, message } = req.body;
-    const newMsg = new Message({ name, email, message });
+    const { name, email, message,phone } = req.body;
+    const newMsg = new Message({ name, email, message, phone });
     await newMsg.save();
     res.status(201).json({ success: true, message: "Message sent!" });
   } catch (err) {

@@ -72,7 +72,7 @@ function App() {
             <Route path="/trek/:slug" element={<TrekDetail />} />
             <Route path="/blogs" element={<BlogsForUsers />} />
             <Route path="/blogs/:id" element={<BlogDetails />} />
-            <Route path="/login" element={<Auth onLogin={() => setIsUserLoggedIn(true)} />} />
+            <Route path="/auth" element={<Auth onLogin={() => setIsUserLoggedIn(true)} />} />
 
             {/* Admin Routes */}
             <Route

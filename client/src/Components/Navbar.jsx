@@ -76,7 +76,7 @@ const Navbar = () => {
                     Logout
                   </button>
                 ) : (
-                  <Link to="/login" className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-200 hover:bg-green-700 transition-all duration-200">
+                  <Link to="/auth" className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-200 hover:bg-green-700 transition-all duration-200">
                     <FaUser className="mr-2" />
                     User Login
                   </Link>

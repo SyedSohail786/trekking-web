@@ -218,7 +218,7 @@ const Availability = () => {
     const token = Cookies.get("token") ;
     if (!token) {
       toast.info("Please login to continue");
-       navigate("/login")
+       navigate("/auth")
     } else {
       setShowBooking(true);
     }

@@ -2,12 +2,13 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FiMail, FiLock, FiLoader } from "react-icons/fi";
+import { useAuthStore } from "../store/authStore";
 
 const AdminLogin = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const {setIsAdmin} = useAuthStore()
   const login = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -21,6 +22,7 @@ const AdminLogin = ({ onLogin }) => {
       localStorage.setItem("adminToken", res.data.token);
       onLogin(true);
       toast.success("Login successful!");
+      setIsAdmin()
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Invalid credentials";
       toast.error(errorMessage);

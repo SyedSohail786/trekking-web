@@ -21,6 +21,7 @@ const uploadRoutes = require("./App/Routes/uploadRoutes");
 const placeRoutes = require("./App/Routes/placeRoutes");
 const visitorBlogRoutes = require("./App/Routes/visitorBlogs");
 const bookingExportRoute = require("./App/Routes/bookingExportRoute");
+const authRoutes = require("./App/Routes/authRoutes");
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/api/districts", districtRoutes);
@@ -33,6 +34,7 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/places", placeRoutes);
 app.use("/api/visitor-blogs", visitorBlogRoutes);
 app.use("/api/bookings", bookingExportRoute);
+app.use("/api/users", authRoutes);
 
 // DB Connect
 mongoose.connect(process.env.MONGO_URI)

@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import Cookies from "js-cookie";
+
 
 const Availability = () => {
   const [searchParams] = useSearchParams();
   const trekId = searchParams.get("trek");
   const date = searchParams.get("date");
-
+  const navigate = useNavigate()
   const [slots, setSlots] = useState([]);
   const [slotId, setSlotId] = useState(null);
   const [showBooking, setShowBooking] = useState(false);
@@ -33,18 +35,18 @@ const Availability = () => {
     fetchSlots();
   }, [trekId, date]);
 
-    const fetchSlots = async () => {
-      setIsLoading(true);
-      try {
-        const res = await axios.get(`http://localhost:8000/api/slots?trekId=${trekId}&date=${date}`);
-        setSlots(res.data);
-        if (res.data.length > 0) setSlotId(res.data[0]._id);
-      } catch {
-        toast.error("Failed to fetch slots");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchSlots = async () => {
+    setIsLoading(true);
+    try {
+      const res = await axios.get(`http://localhost:8000/api/slots?trekId=${trekId}&date=${date}`);
+      setSlots(res.data);
+      if (res.data.length > 0) setSlotId(res.data[0]._id);
+    } catch {
+      toast.error("Failed to fetch slots");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleVisitorChange = (index, field, value) => {
     const updated = [...visitors];
@@ -77,7 +79,7 @@ const Availability = () => {
       ticketDiv.style.width = "600px";
       ticketDiv.style.padding = "20px";
       ticketDiv.style.backgroundColor = "white";
-      
+
       // Ticket HTML content
       ticketDiv.innerHTML = `
         <div style="font-family: 'Arial', sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
@@ -202,6 +204,7 @@ const Availability = () => {
     }
   };
 
+
   if (isLoading) {
     return (
       <div className="max-w-3xl mx-auto p-6 min-h-[300px] flex items-center justify-center">
@@ -209,6 +212,18 @@ const Availability = () => {
       </div>
     );
   }
+
+  const handleBookNow = (e) => {
+    e.preventDefault();
+    const token = Cookies.get("token") ;
+    if (!token) {
+      toast.info("Please login to continue");
+       navigate("/login")
+    } else {
+      setShowBooking(true);
+    }
+  };
+
 
   return (
     <div className="max-w-3xl mx-auto p-4 sm:p-6">
@@ -234,16 +249,16 @@ const Availability = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => setShowBooking(true)}
+                  onClick={handleBookNow}
                   disabled={slots[0].capacity === 0}
-                  className={`px-6 py-3 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105 w-full sm:w-auto ${
-                    slots[0].capacity === 0 
-                      ? "bg-gray-400 cursor-not-allowed" 
+                  className={`px-6 py-3 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105 w-full sm:w-auto ${slots[0].capacity === 0
+                      ? "bg-gray-400 cursor-not-allowed"
                       : "bg-green-600 hover:bg-green-700 text-white"
-                  }`}
+                    }`}
                 >
                   {slots[0].capacity === 0 ? "Fully Booked" : "Book Now"}
                 </button>
+
               </div>
 
               {showBooking && (
@@ -314,11 +329,10 @@ const Availability = () => {
                   <button
                     onClick={addVisitor}
                     disabled={visitors.length >= (slots[0]?.capacity || 10)}
-                    className={`flex items-center text-sm font-medium ${
-                      visitors.length >= (slots[0]?.capacity || 10)
-                        ? "text-gray-400 cursor-not-allowed"
-                        : "text-green-600 hover:text-green-800"
-                    }`}
+                    className={`flex items-center text-sm font-medium ${visitors.length >= (slots[0]?.capacity || 10)
+                      ? "text-gray-400 cursor-not-allowed"
+                      : "text-green-600 hover:text-green-800"
+                      }`}
                   >
                     <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />

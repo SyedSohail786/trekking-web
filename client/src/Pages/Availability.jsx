@@ -33,6 +33,19 @@ const Availability = () => {
     fetchSlots();
   }, [trekId, date]);
 
+    const fetchSlots = async () => {
+      setIsLoading(true);
+      try {
+        const res = await axios.get(`http://localhost:8000/api/slots?trekId=${trekId}&date=${date}`);
+        setSlots(res.data);
+        if (res.data.length > 0) setSlotId(res.data[0]._id);
+      } catch {
+        toast.error("Failed to fetch slots");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
   const handleVisitorChange = (index, field, value) => {
     const updated = [...visitors];
     updated[index][field] = value;
@@ -180,7 +193,7 @@ const Availability = () => {
 
       toast.success("🎉 Booking successful! Generating your ticket...");
       await generatePDF();
-      
+      fetchSlots()
       setVisitors([{ name: "", age: "", gender: "" }]);
       setShowBooking(false);
     } catch (error) {

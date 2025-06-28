@@ -394,7 +394,7 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
             <div className="space-y-3">
               {form.stats.map((stat, i) => (
                 <div key={i} className="flex gap-3">
-                  <input
+                  <input required
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     placeholder="Label (e.g. Difficulty)"
                     value={stat.label}
@@ -402,6 +402,7 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
                     readOnly={mode === "view"}
                   />
                   <input
+                  required
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     placeholder="Value (e.g. Moderate)"
                     value={stat.value}

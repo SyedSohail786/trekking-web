@@ -57,22 +57,22 @@ const TrekDetail = () => {
 
           {/* Sidebar */}
           {
-            // trek.stats && (
-            //   <div className="bg-gray-50 p-6 rounded-lg h-fit sticky top-8">
-            //     <h3 className="text-xl font-semibold text-gray-800 mb-4">Trek Details</h3>
-            //     <div className="space-y-4">
-            //       {trek.stats.map((stat, index) => (
-            //         <div key={index} className="flex justify-between border-b pb-2">
-            //           <span className="text-gray-600 font-medium">{stat.label}</span>
-            //           <span className="text-gray-800">{stat.value}</span>
-            //         </div>
-            //       ))}
-            //     </div>
-            //     {/* <button className="mt-8 w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition">
-            //       Book This Trek
-            //     </button> */}
-            //   </div>
-            // )
+            trek.stats && (
+              <div className="bg-gray-50 p-6 rounded-lg h-fit sticky top-8">
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Trek Details</h3>
+                <div className="space-y-4">
+                  {trek.stats.map((stat, index) => (
+                    <div key={index} className="flex justify-between border-b pb-2">
+                      <span className="text-gray-600 font-medium">{stat.label}</span>
+                      <span className="text-gray-800">{stat.value}</span>
+                    </div>
+                  ))}
+                </div>
+                {/* <button className="mt-8 w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition">
+                  Book This Trek
+                </button> */}
+              </div>
+            )
           }
 
         </div>

@@ -17,13 +17,13 @@ import AdminLogin from "./Components/AdminLogin";
 import AdminDashboard from "./Components/AdminDashboard";
 import { ToastContainer } from "react-toastify";
 import PopularTrek from "./Components/PopularTrek";
-import TrekDetail from "./Components/TrekDetails";
 import Visitors from "./Components/Visitors";
 import AddPlace from "./Components/addPlace";
 import ManageBlog from "./Components/ManageBlogs";
 import BlogsForUsers from "./Components/BlogsForUsers";
 import BlogDetails from "./Components/BlogDetails";
 import Auth from "./Components/Auth";
+import TrekDetails from "./Components/trekDetails";
 
 function App() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
@@ -69,7 +69,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/availability" element={<Availability />} />
-            <Route path="/trek/:slug" element={<TrekDetail />} />
+            <Route path="/trek/:slug" element={<TrekDetails />} />
             <Route path="/blogs" element={<BlogsForUsers />} />
             <Route path="/blogs/:id" element={<BlogDetails />} />
             <Route path="/auth" element={<Auth onLogin={() => setIsUserLoggedIn(true)} />} />

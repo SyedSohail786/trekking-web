@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FiMail, FiLock, FiLoader } from "react-icons/fi";
 import { useAuthStore } from "../store/authStore";
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminLogin = ({ onLogin }) => {
   const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ const AdminLogin = ({ onLogin }) => {
     setIsLoading(true);
     
     try {
-      const res = await axios.post("http://localhost:8000/api/admin/login", { 
+      const res = await axios.post(`${backendURL}/api/admin/login`, { 
         email, 
         password 
       });

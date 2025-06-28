@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FiArrowRight, FiClock } from "react-icons/fi";
 import { format } from "date-fns";
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const BlogCards = () => {
   const [blogs, setBlogs] = useState([]);
@@ -13,7 +14,7 @@ const BlogCards = () => {
     const fetchBlogs = async () => {
       try {
         setIsLoading(true);
-        const res = await axios.get("http://localhost:8000/api/visitor-blogs");
+        const res = await axios.get(`${backendURL}/api/visitor-blogs`);
         setBlogs(res.data);
       } catch (err) {
         console.error("Failed to fetch blogs", err);

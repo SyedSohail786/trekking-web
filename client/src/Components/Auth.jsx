@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import { FiUser, FiMail, FiLock, FiLogIn, FiUserPlus } from "react-icons/fi";
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const Auth = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -22,7 +23,7 @@ const Auth = ({ onLogin }) => {
     const url = isLogin ? "/api/users/login" : "/api/users/register";
 
     try {
-      const res = await axios.post(`http://localhost:8000${url}`, form);
+      const res = await axios.post(`${backendURL}+${url}`, form);
       toast.success(isLogin ? "Login successful" : "Registration successful");
       setUserLoggedIn(true, res.data.token);
       if (onLogin) onLogin();

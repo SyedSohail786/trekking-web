@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FiEdit2, FiTrash2, FiUpload, FiLoader } from "react-icons/fi";
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const ManageBlog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -19,7 +20,7 @@ const ManageBlog = () => {
   const fetchBlogs = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get("http://localhost:8000/api/visitor-blogs");
+      const res = await axios.get(`${backendURL}/api/visitor-blogs`);
       setBlogs(res.data);
     } catch (err) {
       toast.error("Failed to fetch blogs");
@@ -58,10 +59,10 @@ const ManageBlog = () => {
 
     try {
       if (editingId) {
-        await axios.put(`http://localhost:8000/api/visitor-blogs/${editingId}`, data);
+        await axios.put(`${backendURL}/api/visitor-blogs/${editingId}`, data);
         toast.success("Blog updated successfully!");
       } else {
-        await axios.post("http://localhost:8000/api/visitor-blogs", data);
+        await axios.post(`${backendURL}/api/visitor-blogs`, data);
         toast.success("Blog created successfully!");
       }
       resetForm();
@@ -77,7 +78,7 @@ const ManageBlog = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this blog?")) {
       try {
-        await axios.delete(`http://localhost:8000/api/visitor-blogs/${id}`);
+        await axios.delete(`${backendURL}/api/visitor-blogs/${id}`);
         toast.success("Blog deleted successfully!");
         fetchBlogs();
       } catch (err) {

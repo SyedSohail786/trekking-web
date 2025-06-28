@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const TrekManagement = () => {
   const [treks, setTreks] = useState([]);
@@ -12,7 +13,7 @@ const TrekManagement = () => {
   const fetchTreks = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get("http://localhost:8000/api/places");
+      const res = await axios.get(`${backendURL}/api/places`);
       setTreks(res.data);
     } catch (err) {
       toast.error("Failed to load treks");
@@ -29,7 +30,7 @@ const TrekManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this trek?")) {
       try {
-        await axios.delete(`http://localhost:8000/api/places/${id}`);
+        await axios.delete(`${backendURL}/api/places/${id}`);
         toast.success("Trek deleted successfully");
         fetchTreks();
       } catch (err) {
@@ -263,8 +264,8 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
     const response = await axios({
       method: mode === "add" ? "post" : "put",
       url: mode === "add"
-        ? "http://localhost:8000/api/places"
-        : `http://localhost:8000/api/places/${trekData._id}`,
+        ? `${backendURL}/api/places`
+        : `${backendURL}/api/places/${trekData._id}`,
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data"

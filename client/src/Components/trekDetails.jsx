@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
-const TrekDetail = () => {
+const TrekDetails = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [trek, setTrek] = useState(null);
@@ -17,7 +18,7 @@ const TrekDetail = () => {
       try {
         setLoading(true);
         const id = slug.split('-').pop();
-        const res = await axios.get(`http://localhost:8000/api/places/${id}`);
+        const res = await axios.get(`${backendURL}/api/places/${id}`);
         if (isMounted) {
           setTrek(res.data);
           // Set first image as selected by default
@@ -164,4 +165,4 @@ const TrekDetail = () => {
   );
 };
 
-export default TrekDetail;
+export default TrekDetails;

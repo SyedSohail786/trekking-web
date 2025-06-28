@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { saveAs } from 'file-saver';
 import { FiDownload, FiCalendar, FiClock, FiUsers, FiUser, FiFilter } from "react-icons/fi";
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const Visitors = () => {
   const [bookings, setBookings] = useState([]);
@@ -15,7 +16,7 @@ const Visitors = () => {
     const fetchBookings = async () => {
       setIsLoading(true);
       try {
-        const res = await axios.get("http://localhost:8000/api/bookings");
+        const res = await axios.get(`${backendURL}/api/bookings`);
         setBookings(res.data);
       } catch (err) {
         toast.error("Failed to load visitor bookings");
@@ -35,7 +36,7 @@ const Visitors = () => {
 
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/bookings/export?start=${startDate}&end=${endDate}`,
+        `${backendURL}/api/bookings/export?start=${startDate}&end=${endDate}`,
         { responseType: "blob" }
       );
       const blob = new Blob([res.data], { type: "text/csv;charset=utf-8" });

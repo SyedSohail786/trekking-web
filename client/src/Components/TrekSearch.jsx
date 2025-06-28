@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const TrekSearch = () => {
   const [districts, setDistricts] = useState([]);
@@ -14,7 +15,7 @@ const TrekSearch = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get("http://localhost:8000/api/districts")
+    axios.get(`${backendURL}/api/districts`)
       .then(res => {
         setDistricts(res.data);
         setIsLoading(false);
@@ -28,7 +29,7 @@ const TrekSearch = () => {
   useEffect(() => {
     if (selectedDistrict) {
       setIsLoading(true);
-      axios.get(`http://localhost:8000/api/treks/district/${selectedDistrict}`)
+      axios.get(`${backendURL}/api/treks/district/${selectedDistrict}`)
         .then(res => {
           setTreks(res.data);
           setIsLoading(false);

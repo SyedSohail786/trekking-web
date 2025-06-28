@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminDashboard = () => {
   const token = localStorage.getItem("adminToken");
@@ -47,7 +48,7 @@ const AdminDashboard = () => {
   const fetchDistricts = async () => {
     setIsLoading(prev => ({...prev, districts: true}));
     try {
-      const res = await axios.get("http://localhost:8000/api/districts");
+      const res = await axios.get(`${backendURL}/api/districts`);
       setDistricts(res.data);
     } catch (error) {
       toast.error("Failed to fetch districts");
@@ -59,7 +60,7 @@ const AdminDashboard = () => {
   const fetchTreks = async (districtId) => {
     setIsLoading(prev => ({...prev, treks: true}));
     try {
-      const res = await axios.get(`http://localhost:8000/api/treks/district/${districtId}`);
+      const res = await axios.get(`${backendURL}/api/treks/district/${districtId}`);
       setTreks(res.data);
     } catch (error) {
       toast.error("Failed to fetch treks");
@@ -70,7 +71,7 @@ const AdminDashboard = () => {
 
   const fetchSlots = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/slots?trekId=${selectedTrek}&date=${slotDate}`);
+      const res = await axios.get(`${backendURL}/api/slots?trekId=${selectedTrek}&date=${slotDate}`);
       setSlots(res.data);
       // Initialize updates object
       const updates = {};
@@ -101,7 +102,7 @@ const AdminDashboard = () => {
     
     setIsLoading(prev => ({...prev, updatingSlot: true}));
     try {
-      await axios.put(`http://localhost:8000/api/slots/${slotId}`, {
+      await axios.put(`${backendURL}/api/slots/${slotId}`, {
         time: slotUpdates[slotId].time,
         capacity: slotUpdates[slotId].capacity,
       });
@@ -117,7 +118,7 @@ const AdminDashboard = () => {
   const handleSlotDelete = async (slotId) => {
     setIsLoading(prev => ({...prev, deletingSlot: true}));
     try {
-      await axios.delete(`http://localhost:8000/api/treks/${slotId}`);
+      await axios.delete(`${backendURL}/api/treks/${slotId}`);
       toast.success("Slot deleted successfully");
       fetchSlots();
     } catch (error) {
@@ -135,7 +136,7 @@ const AdminDashboard = () => {
     
     setIsLoading(prev => ({...prev, addingDistrict: true}));
     try {
-      await axios.post("http://localhost:8000/api/districts", { name: districtName });
+      await axios.post(`${backendURL}/api/districts`, { name: districtName });
       setDistrictName("");
       toast.success("District added successfully");
       fetchDistricts();
@@ -154,7 +155,7 @@ const AdminDashboard = () => {
     
     setIsLoading(prev => ({...prev, addingTrek: true}));
     try {
-      await axios.post("http://localhost:8000/api/treks", {
+      await axios.post(`${backendURL}/api/treks`, {
         name: trekName,
         districtId: selectedDistrict,
       });
@@ -176,7 +177,7 @@ const AdminDashboard = () => {
     
     setIsLoading(prev => ({...prev, addingSlot: true}));
     try {
-      await axios.post("http://localhost:8000/api/slots", {
+      await axios.post(`${backendURL}/api/slots`, {
         trekId: selectedTrek,
         date: slotDate,
         time: slotTime,
@@ -253,7 +254,7 @@ const AdminDashboard = () => {
                         <button
                           onClick={async () => {
                             try {
-                              await axios.delete(`http://localhost:8000/api/districts/${d._id}`);
+                              await axios.delete(`${backendURL}/api/districts/${d._id}`);
                               toast.success("District deleted");
                               fetchDistricts();
                             } catch {
@@ -338,7 +339,7 @@ const AdminDashboard = () => {
                         <button
                           onClick={async () => {
                             try {
-                              await axios.delete(`http://localhost:8000/api/treks/${t._id}`);
+                              await axios.delete(`${backendURL}/api/treks/${t._id}`);
                               toast.success("Trek deleted");
                               fetchTreks(selectedDistrict);
                             } catch {

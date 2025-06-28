@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const PopularTrek = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const PopularTrek = () => {
     const fetchTreks = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:8000/api/places");
+        const res = await axios.get(`${backendURL}/api/places`);
         if (isMounted) {
           setTreks(res.data);
         }

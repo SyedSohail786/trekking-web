@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FiArrowLeft, FiClock, FiShare2 } from "react-icons/fi";
 import { format } from "date-fns";
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const BlogDetails = () => {
   const { id } = useParams();
@@ -16,8 +17,8 @@ const BlogDetails = () => {
       try {
         setIsLoading(true);
         const [blogRes, relatedRes] = await Promise.all([
-          axios.get(`http://localhost:8000/api/visitor-blogs/${id}`),
-          axios.get(`http://localhost:8000/api/visitor-blogs?limit=3`)
+          axios.get(`${backendURL}/api/visitor-blogs/${id}`),
+          axios.get(`${backendURL}/api/visitor-blogs?limit=3`)
         ]);
         setBlog(blogRes.data);
         setRelatedBlogs(relatedRes.data.filter(b => b._id !== id));

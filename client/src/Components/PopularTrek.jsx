@@ -9,8 +9,8 @@ const PopularTrek = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    let isMounted = true; // Flag to track component mount status
-    
+    let isMounted = true;
+
     const fetchTreks = async () => {
       try {
         setLoading(true);
@@ -31,9 +31,8 @@ const PopularTrek = () => {
     };
 
     fetchTreks();
-
     return () => {
-      isMounted = false; // Cleanup function
+      isMounted = false;
     };
   }, []);
 
@@ -86,21 +85,17 @@ const PopularTrek = () => {
       <h2 className="text-3xl text-center mb-8 text-gray-800 uppercase tracking-wider font-bold">
         POPULAR TREKS
       </h2>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {treks.map((trek) => (
-          <div 
-            key={trek._id} 
+          <div
+            key={trek._id}
             className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full"
           >
-            <img 
-              src={trek.image || '/placeholder-trek.jpg'} 
-              alt={trek.title || 'Trek image'} 
+            <img
+              src={trek.image || '/placeholder-trek.jpg'}
+              alt={trek.title || 'Trek image'}
               className="w-full h-48 object-cover"
-              onError={(e) => {
-                e.target.onerror = null; 
-                e.target.src = '/placeholder-trek.jpg';
-              }}
             />
             <div className="p-6 flex flex-col flex-grow">
               <h3 className="text-xl font-semibold text-blue-500 mb-2 text-center border-b border-gray-200 pb-2">
@@ -113,7 +108,7 @@ const PopularTrek = () => {
                 {trek.description?.slice(0, 120) || 'No description available'}...
               </p>
               <div className="text-center mt-auto">
-                <button 
+                <button
                   onClick={() => handleReadMore(trek.title, trek._id)}
                   className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300"
                 >

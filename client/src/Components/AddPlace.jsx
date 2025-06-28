@@ -39,21 +39,9 @@ const TrekManagement = () => {
   };
 
   // Handle form submit (add/edit)
-  const handleSubmit = async (formData) => {
-    try {
-      if (viewMode === "add") {
-        await axios.post("http://localhost:8000/api/places", formData);
-        toast.success("Trek added successfully");
-      } else {
-        await axios.put(`http://localhost:8000/api/places/${currentTrek._id}`, formData);
-        toast.success("Trek updated successfully");
-      }
-      setViewMode("list");
-      fetchTreks();
-    } catch (err) {
-      toast.error(`Failed to ${viewMode === "add" ? "add" : "update"} trek`);
-    }
-  };
+  const handleSubmit = async () => {
+  fetchTreks(); 
+};
 
   return (
     <div className="container mx-auto p-4">
@@ -61,7 +49,10 @@ const TrekManagement = () => {
         <TrekList
           treks={treks}
           isLoading={isLoading}
-          onAdd={() => setViewMode("add")}
+          onAdd={() => {
+            setCurrentTrek(null);
+            setViewMode("add");
+          }}
           onEdit={(trek) => {
             setCurrentTrek(trek);
             setViewMode("edit");
@@ -112,6 +103,7 @@ const TrekList = ({ treks, isLoading, onAdd, onEdit, onView, onDelete }) => {
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trek Name</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gallery</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
@@ -123,6 +115,20 @@ const TrekList = ({ treks, isLoading, onAdd, onEdit, onView, onDelete }) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-500">{trek.location}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex -space-x-2">
+                      {trek.gallery?.slice(0, 3).map((img, i) => (
+                        <div key={i} className="h-8 w-8 rounded-full border-2 border-white overflow-hidden">
+                          <img src={img} alt="" className="h-full w-full object-cover" />
+                        </div>
+                      ))}
+                      {trek.gallery?.length > 3 && (
+                        <div className="h-8 w-8 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center text-xs font-medium">
+                          +{trek.gallery.length - 3}
+                        </div>
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end space-x-2">
@@ -166,8 +172,9 @@ const TrekList = ({ treks, isLoading, onAdd, onEdit, onView, onDelete }) => {
   );
 };
 
-// Trek Form Component (for Add/Edit/View)
+// Trek Form Component
 const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     title: "",
     image: "",
@@ -175,14 +182,13 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
     description: "",
     fullDetails: [""],
     stats: [{ label: "", value: "" }],
-    gallery: [""]
+    gallery: []
   });
   const [imageFile, setImageFile] = useState(null);
   const [galleryFiles, setGalleryFiles] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
 
-  // Initialize form with trekData when in edit/view mode
+  // Initialize form
   useEffect(() => {
     if (mode !== "add" && trekData) {
       setForm({
@@ -192,7 +198,7 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
         description: trekData.description || "",
         fullDetails: trekData.fullDetails?.length ? trekData.fullDetails : [""],
         stats: trekData.stats?.length ? trekData.stats : [{ label: "", value: "" }],
-        gallery: trekData.gallery?.length ? trekData.gallery : [""]
+        gallery: trekData.gallery || []
       });
       if (trekData.image) setImagePreview(trekData.image);
     }
@@ -230,25 +236,57 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
     setGalleryFiles(e.target.files);
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      // In a real app, you would upload files here and get URLs
-      // For now, we'll just use the existing image if in edit mode
-      const finalData = {
-        ...form,
-        image: imageFile ? URL.createObjectURL(imageFile) : form.image
-      };
-      
-      onSubmit(finalData);
-    } catch (err) {
-      console.error("Error submitting form:", err);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleRemoveGalleryImage = (index) => {
+    const updatedGallery = [...form.gallery];
+    updatedGallery.splice(index, 1);
+    setForm(prev => ({ ...prev, gallery: updatedGallery }));
   };
+
+ const handleFormSubmit = async (e) => {
+  e.preventDefault();
+  if (isSubmitting) return; // prevent double-submit
+
+  setIsSubmitting(true);
+
+  try {
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("location", form.location);
+    formData.append("description", form.description);
+    formData.append("fullDetails", JSON.stringify(form.fullDetails));
+    formData.append("stats", JSON.stringify(form.stats));
+    if (imageFile) formData.append("image", imageFile);
+    Array.from(galleryFiles).forEach(file => {
+      formData.append("gallery", file);
+    });
+
+    const response = await axios({
+      method: mode === "add" ? "post" : "put",
+      url: mode === "add"
+        ? "http://localhost:8000/api/places"
+        : `http://localhost:8000/api/places/${trekData._id}`,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
+
+    toast.success(`Trek ${mode === "add" ? "added" : "updated"} successfully`);
+
+    // ✅ Tell parent to refresh list
+    await onSubmit(); 
+    onCancel(); // switch back to list mode
+
+  } catch (err) {
+    toast.error(`Failed to ${mode === "add" ? "add" : "update"} trek`);
+    console.error(err);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
+
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden">
@@ -283,34 +321,34 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                   <p className="text-sm text-gray-500">
-                    {imageFile ? imageFile.name : "Click to upload"}
+                    {imageFile ? imageFile.name : form.image ? "Current image" : "Click to upload"}
                   </p>
                 </div>
-                <input 
-                  type="file" 
-                  onChange={handleImageChange} 
-                  className="hidden" 
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                  className="hidden"
                   accept="image/*"
-                  required={mode === "add"}
+                  required={mode === "add" && !form.image}
                   disabled={mode === "view"}
                 />
               </label>
               {(imagePreview || form.image) && (
                 <div className="w-24 h-24 rounded-lg overflow-hidden border border-gray-200">
-                  <img 
-                    src={imagePreview || form.image} 
-                    alt="Preview" 
-                    className="w-full h-full object-cover" 
+                  <img
+                    src={imagePreview || form.image}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
                   />
                 </div>
               )}
             </div>
           ) : (
             <div className="w-full h-48 rounded-lg overflow-hidden border border-gray-200">
-              <img 
-                src={form.image} 
-                alt="Trek" 
-                className="w-full h-full object-cover" 
+              <img
+                src={form.image}
+                alt="Trek"
+                className="w-full h-full object-cover"
               />
             </div>
           )}
@@ -343,7 +381,7 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
           />
         </div>
 
-        {/* Full Details - only show in view mode if there are details */}
+        {/* Full Details */}
         {(mode !== "view" || form.fullDetails.some(d => d.trim() !== "")) && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Full Details</label>
@@ -387,14 +425,14 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
           </div>
         )}
 
-        {/* Stats - only show in view mode if there are stats */}
+        {/* Stats */}
         {(mode !== "view" || form.stats.some(s => s.label.trim() !== "" || s.value.trim() !== "")) && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Trek Statistics</label>
             <div className="space-y-3">
               {form.stats.map((stat, i) => (
                 <div key={i} className="flex gap-3">
-                  <input required
+                  <input
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     placeholder="Label (e.g. Difficulty)"
                     value={stat.label}
@@ -402,7 +440,6 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
                     readOnly={mode === "view"}
                   />
                   <input
-                  required
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     placeholder="Value (e.g. Moderate)"
                     value={stat.value}
@@ -438,6 +475,66 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
           </div>
         )}
 
+        {/* Gallery Images */}
+        {(mode !== "view" || form.gallery.length > 0) && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Gallery Images</label>
+            <div className="space-y-4">
+              {/* Existing gallery images */}
+              {form.gallery.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {form.gallery.map((img, index) => (
+                    <div key={index} className="relative group">
+                      <div className="h-32 rounded-lg overflow-hidden border border-gray-200">
+                        <img
+                          src={img}
+                          alt={`Gallery ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      {mode !== "view" && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveGalleryImage(index)}
+                          className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* File upload for new images */}
+              {mode !== "view" && (
+                <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 p-6">
+                  <div className="text-center">
+                    <svg className="w-8 h-8 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {galleryFiles.length > 0
+                        ? `${galleryFiles.length} new file(s) selected`
+                        : "Click to upload multiple images"}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1">PNG, JPG, JPEG up to 5MB</p>
+                  </div>
+                  <input
+                    type="file"
+                    multiple
+                    onChange={handleGalleryChange}
+                    className="hidden"
+                    accept="image/*"
+                  />
+                </label>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Form Actions */}
         <div className="flex justify-end gap-3 pt-6">
           <button
@@ -451,11 +548,10 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`px-6 py-2 rounded-lg shadow-md transition-all ${
-                isSubmitting
-                  ? "bg-green-400 cursor-not-allowed"
-                  : "bg-green-600 hover:bg-green-700"
-              } text-white font-medium flex items-center justify-center`}
+              className={`px-6 py-2 rounded-lg shadow-md transition-all ${isSubmitting
+                ? "bg-green-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700"
+                } text-white font-medium flex items-center justify-center`}
             >
               {isSubmitting ? (
                 <>

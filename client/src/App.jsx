@@ -56,7 +56,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/availability" element={<Availability />} />
-          <Route path="/trek/:id" element={<TrekDetail />} />
+          <Route path="/trek/:slug" element={<TrekDetail />} />
+
           
 
           {/* Admin Routes */}

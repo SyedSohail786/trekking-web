@@ -19,7 +19,8 @@ const messageRoutes = require("./App/Routes/messageRoutes");
 const bookingRoutes = require("./App/Routes/bookingRoutes");
 const uploadRoutes = require("./App/Routes/uploadRoutes");
 const placeRoutes = require("./App/Routes/placeRoutes");
-
+const visitorBlogRoutes = require("./App/Routes/visitorBlogs");
+const bookingExportRoute = require("./App/Routes/bookingExportRoute");
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/api/districts", districtRoutes);
@@ -30,6 +31,8 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/places", placeRoutes);
+app.use("/api/visitor-blogs", visitorBlogRoutes);
+app.use("/api/bookings", bookingExportRoute);
 
 // DB Connect
 mongoose.connect(process.env.MONGO_URI)

@@ -20,6 +20,9 @@ import PopularTrek from "./Components/PopularTrek";
 import TrekDetail from "./Components/TrekDetails";
 import Visitors from "./Components/Visitors";
 import AddPlace from "./Components/addPlace";
+import ManageBlog from "./Components/ManageBlogs";
+import BlogsForUsers from "./Components/BlogsForUsers";
+import BlogDetails from "./Components/BlogDetails";
 
 function App() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
@@ -57,7 +60,8 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/availability" element={<Availability />} />
           <Route path="/trek/:slug" element={<TrekDetail />} />
-
+          <Route path="/blogs" element={<BlogsForUsers />} />
+          <Route path="/blogs/:id" element={<BlogDetails />} />
           
 
           {/* Admin Routes */}
@@ -97,6 +101,12 @@ function App() {
             path="/admin/addPlace"
             element={
               isAdminLoggedIn ? <AddPlace /> : <Navigate to="/admin" />
+            }
+          />
+          <Route
+            path="/admin/manageBlog"
+            element={
+              isAdminLoggedIn ? <ManageBlog /> : <Navigate to="/admin" />
             }
           />
         </Routes>

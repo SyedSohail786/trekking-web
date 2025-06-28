@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { saveAs } from 'file-saver'; // install using `npm install file-saver`
+
+
 
 const Visitors = () => {
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -21,12 +26,48 @@ const Visitors = () => {
     fetchBookings();
   }, []);
 
+  const handleExport = async () => {
+    if (!startDate || !endDate) {
+      toast.error("Select both start and end dates");
+      return;
+    }
+
+    try {
+      const res = await axios.get(`http://localhost:8000/api/bookings/export?start=${startDate}&end=${endDate}`, {
+        responseType: "blob"
+      });
+      const blob = new Blob([res.data], { type: "text/csv;charset=utf-8" });
+      saveAs(blob, `visitors_${startDate}_to_${endDate}.csv`);
+      toast.success("CSV downloaded!");
+    } catch (err) {
+      toast.error("Failed to download CSV");
+    }
+  };
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="bg-white rounded-xl shadow-md overflow-hidden">
         <div className="bg-gradient-to-r from-green-700 to-green-600 p-6 text-white">
           <h1 className="text-2xl font-bold text-center">Visitor Bookings</h1>
         </div>
+
+        {/* download csv file */}
+        <div className="flex gap-4 mb-6 items-end">
+          <div>
+            <label className="block text-sm font-medium mb-1">Start Date</label>
+            <input type="date" className="border p-2 rounded" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">End Date</label>
+            <input type="date" className="border p-2 rounded" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          </div>
+          <button
+            onClick={handleExport}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            Download CSV
+          </button>
+        </div>
+
 
         <div className="p-6">
           {isLoading ? (

@@ -16,7 +16,16 @@ const HeroCarousel = () => {
     {
       url: "https://aranyavihaara.karnataka.gov.in/images/b1.png",
       alt: "Waterfall in Karnataka forest"
-    }
+    },
+    {
+      url: "https://aranyavihaara.karnataka.gov.in/images/b5.png",
+      alt: "Waterfall in Karnataka forest"
+    },
+    {
+      url: "https://aranyavihaara.karnataka.gov.in/images/b6.png",
+      alt: "Waterfall in Karnataka forest"
+    },
+
   ];
 
   const settings = {

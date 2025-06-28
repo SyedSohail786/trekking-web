@@ -1,6 +1,7 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaHome, FaInfoCircle, FaEnvelope, FaSignOutAlt, FaUserCog, FaUsers, FaInbox, FaHiking, FaBars, FaTimes } from "react-icons/fa";
+import { FaBookOpen } from "react-icons/fa6";
 
 const Navbar = ({ isAdmin, onLogout }) => {
   const [adminStatus, setAdminStatus] = useState(isAdmin);
@@ -24,7 +25,7 @@ const Navbar = ({ isAdmin, onLogout }) => {
 
   return (
     <nav className="bg-gradient-to-r from-green-900 to-green-800 text-white shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
@@ -34,7 +35,7 @@ const Navbar = ({ isAdmin, onLogout }) => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-2">
             {!adminStatus ? (
               <>
                 <Link
@@ -50,6 +51,13 @@ const Navbar = ({ isAdmin, onLogout }) => {
                 >
                   <FaInfoCircle className="mr-2" />
                   About
+                </Link>
+                <Link
+                  to="/blogs"
+                  className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-200 hover:bg-green-700 transition-all duration-200"
+                >
+                  <FaBookOpen className="mr-2" />
+                  Blogs
                 </Link>
                 <Link
                   to="/contact"
@@ -94,6 +102,13 @@ const Navbar = ({ isAdmin, onLogout }) => {
                 >
                   <FaHiking className="mr-2" />
                   Treks
+                </Link>
+                <Link
+                  to="/admin/manageBlog"
+                  className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-200 hover:bg-green-700 transition-all duration-200"
+                >
+                  <FaBookOpen className="mr-2" />
+                  Manage BLogs
                 </Link>
                 <button
                   onClick={handleLogoutClick}

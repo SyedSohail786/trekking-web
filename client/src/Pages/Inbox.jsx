@@ -5,27 +5,48 @@ import { toast } from "react-toastify";
 const Inbox = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
   const token = localStorage.getItem("adminToken");
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      setIsLoading(true);
-      try {
-        const res = await axios.get("http://localhost:8000/api/messages", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setMessages(res.data);
-      } catch (err) {
-        toast.error("Failed to fetch messages");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchMessages();
   }, [token]);
+
+  const fetchMessages = async () => {
+    setIsLoading(true);
+    try {
+      const res = await axios.get("http://localhost:8000/api/messages", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setMessages(res.data);
+    } catch (err) {
+      toast.error("Failed to fetch messages");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const confirm = window.confirm("Are you sure you want to delete this message?");
+    if (!confirm) return;
+
+    setDeletingId(id);
+    try {
+      await axios.delete(`http://localhost:8000/api/messages/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setMessages(prev => prev.filter(msg => msg._id !== id));
+      toast.success("Message deleted");
+    } catch (err) {
+      toast.error("Failed to delete message");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
     <div className="max-w-5xl mx-auto p-6">
@@ -63,16 +84,25 @@ const Inbox = () => {
                         <p className="text-xs text-gray-500">{message.email}</p>
                       </div>
                     </div>
-                    <span className="text-xs text-gray-500">
-                      {new Date(message.createdAt).toLocaleString()}
-                    </span>
+                    <div className="flex items-center gap-4">
+                      <span className="text-xs text-gray-500">
+                        {new Date(message.createdAt).toLocaleString()}
+                      </span>
+                      <button
+                        onClick={() => handleDelete(message._id)}
+                        disabled={deletingId === message._id}
+                        className="text-red-500 hover:text-red-700 text-sm"
+                      >
+                        {deletingId === message._id ? "Deleting..." : "Delete"}
+                      </button>
+                    </div>
                   </div>
                   <div className="p-4">
                     <p className="text-gray-700 whitespace-pre-line">{message.message}</p>
                     {message.phone && (
                       <div className="mt-3">
-                        <a 
-                          href={`tel:${message.phone}`} 
+                        <a
+                          href={`tel:${message.phone}`}
                           className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800"
                         >
                           <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

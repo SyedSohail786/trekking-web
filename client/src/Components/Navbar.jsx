@@ -37,29 +37,29 @@ const Navbar = ({ isAdmin, onLogout }) => {
           <div className="hidden md:flex items-center space-x-6">
             {!adminStatus ? (
               <>
-                <Link 
-                  to="/" 
+                <Link
+                  to="/"
                   className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-200 hover:bg-green-700 transition-all duration-200"
                 >
                   <FaHome className="mr-2" />
                   Home
                 </Link>
-                <Link 
-                  to="/about" 
+                <Link
+                  to="/about"
                   className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-200 hover:bg-green-700 transition-all duration-200"
                 >
                   <FaInfoCircle className="mr-2" />
                   About
                 </Link>
-                <Link 
-                  to="/contact" 
+                <Link
+                  to="/contact"
                   className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-200 hover:bg-green-700 transition-all duration-200"
                 >
                   <FaEnvelope className="mr-2" />
                   Contact
                 </Link>
-                <Link 
-                  to="/admin" 
+                <Link
+                  to="/admin"
                   className="flex items-center bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                 >
                   <FaUserCog className="mr-2" />
@@ -68,28 +68,28 @@ const Navbar = ({ isAdmin, onLogout }) => {
               </>
             ) : (
               <>
-                <Link 
-                  to="/admin/dashboard" 
+                <Link
+                  to="/admin/dashboard"
                   className="flex items-center bg-white text-green-800 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
                 >
                   Dashboard
                 </Link>
-                <Link 
-                  to="/admin/visitors" 
+                <Link
+                  to="/admin/visitors"
                   className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-200 hover:bg-green-700 transition-all duration-200"
                 >
                   <FaUsers className="mr-2" />
                   Visitors
                 </Link>
-                <Link 
-                  to="/admin/inbox" 
+                <Link
+                  to="/admin/inbox"
                   className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-200 hover:bg-green-700 transition-all duration-200"
                 >
                   <FaInbox className="mr-2" />
                   Inbox
                 </Link>
-                <Link 
-                  to="/admin/addPlace" 
+                <Link
+                  to="/admin/addPlace"
                   className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-200 hover:bg-green-700 transition-all duration-200"
                 >
                   <FaHiking className="mr-2" />
@@ -128,32 +128,32 @@ const Navbar = ({ isAdmin, onLogout }) => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {!adminStatus ? (
               <>
-                <Link 
-                  to="/" 
+                <Link
+                  to="/"
                   className="flex items-center px-3 py-2 rounded-md text-base font-medium hover:text-yellow-200 hover:bg-green-700 block transition-all duration-200"
                   onClick={toggleMobileMenu}
                 >
                   <FaHome className="mr-2" />
                   Home
                 </Link>
-                <Link 
-                  to="/about" 
+                <Link
+                  to="/about"
                   className="flex items-center px-3 py-2 rounded-md text-base font-medium hover:text-yellow-200 hover:bg-green-700 block transition-all duration-200"
                   onClick={toggleMobileMenu}
                 >
                   <FaInfoCircle className="mr-2" />
                   About
                 </Link>
-                <Link 
-                  to="/contact" 
+                <Link
+                  to="/contact"
                   className="flex items-center px-3 py-2 rounded-md text-base font-medium hover:text-yellow-200 hover:bg-green-700 block transition-all duration-200"
                   onClick={toggleMobileMenu}
                 >
                   <FaEnvelope className="mr-2" />
                   Contact
                 </Link>
-                <Link 
-                  to="/admin" 
+                <Link
+                  to="/admin"
                   className="flex items-center justify-center bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-2 rounded-lg font-medium transition-colors mt-2 w-full"
                   onClick={toggleMobileMenu}
                 >
@@ -163,31 +163,31 @@ const Navbar = ({ isAdmin, onLogout }) => {
               </>
             ) : (
               <>
-                <Link 
-                  to="/admin/dashboard" 
+                <Link
+                  to="/admin/dashboard"
                   className="flex items-center justify-center bg-white text-green-800 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors mb-2 w-full"
                   onClick={toggleMobileMenu}
                 >
                   Dashboard
                 </Link>
-                <Link 
-                  to="/admin/visitors" 
+                <Link
+                  to="/admin/visitors"
                   className="flex items-center px-3 py-2 rounded-md text-base font-medium hover:text-yellow-200 hover:bg-green-700 block transition-all duration-200"
                   onClick={toggleMobileMenu}
                 >
                   <FaUsers className="mr-2" />
                   Visitors
                 </Link>
-                <Link 
-                  to="/admin/inbox" 
+                <Link
+                  to="/admin/inbox"
                   className="flex items-center px-3 py-2 rounded-md text-base font-medium hover:text-yellow-200 hover:bg-green-700 block transition-all duration-200"
                   onClick={toggleMobileMenu}
                 >
                   <FaInbox className="mr-2" />
                   Inbox
                 </Link>
-                <Link 
-                  to="/admin/addPlace" 
+                <Link
+                  to="/admin/addPlace"
                   className="flex items-center px-3 py-2 rounded-md text-base font-medium hover:text-yellow-200 hover:bg-green-700 block transition-all duration-200"
                   onClick={toggleMobileMenu}
                 >

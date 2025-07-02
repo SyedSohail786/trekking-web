@@ -6,7 +6,8 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="text-center md:text-left">
           <h2 className="text-lg font-semibold">Aranya Vihaara</h2>
-          <p className="text-sm text-gray-300">© {new Date().getFullYear()} Digisnare. All rights reserved.</p>
+          <p className="text-sm text-gray-300">© {new Date().getFullYear()} Aranya Vihaara. All rights reserved.</p>
+          <p className="text-sm text-gray-300 font-bold">Developed By Syed Sohail</p>
         </div>
 
         <div className="flex space-x-4">

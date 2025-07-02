@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
-const TrekManagement = () => {
+const AddPlace = () => {
   const [treks, setTreks] = useState([]);
   const [viewMode, setViewMode] = useState("list"); // 'list', 'add', 'edit', 'view'
   const [currentTrek, setCurrentTrek] = useState(null);
@@ -573,4 +573,4 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
   );
 };
 
-export default TrekManagement;
+export default AddPlace;

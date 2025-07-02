@@ -38,8 +38,27 @@ app.use("/api/users", authRoutes);
 
 // DB Connect
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
+  .then(async () => {
     console.log("MongoDB connected");
-    app.listen(process.env.PORT, () => console.log("Server running",process.env.PORT));
+
+    const Admin = require("./App/Models/AdminUser");
+    const bcrypt = require('bcrypt');
+    const existingAdmin = await Admin.findOne({ email: "admin@email.com" });
+    if (!existingAdmin) {
+      const hashedPassword = await bcrypt.hash("admin@123", 10);
+      const newAdmin = new Admin({
+        email: "admin@email.com",
+        password: hashedPassword,
+      });
+
+      await newAdmin.save();
+      console.log("✅ Default admin created.");
+    } else {
+      console.log("✅ Admin already exists.");
+    }
+
+    app.listen(process.env.PORT, () => {
+      console.log("Server running",process.env.PORT)
+    });
   })
   .catch((err) => console.error(err));

@@ -18,12 +18,12 @@ import AdminDashboard from "./Components/AdminDashboard";
 import { ToastContainer } from "react-toastify";
 import PopularTrek from "./Components/PopularTrek";
 import Visitors from "./Components/Visitors";
-import AddPlace from "./Components/addPlace";
 import ManageBlog from "./Components/ManageBlogs";
 import BlogsForUsers from "./Components/BlogsForUsers";
 import BlogDetails from "./Components/BlogDetails";
 import Auth from "./Components/Auth";
-import TrekDetails from "./Components/trekDetails";
+import TrekDetails from "./Components/TrekDetails";
+import AddPlace from "./Components/AddPlace";
 
 function App() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);

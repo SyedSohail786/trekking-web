@@ -2,13 +2,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
-<<<<<<< HEAD
-const AddPlace = () => {
-  const [treks, setTreks] = useState([]);
-  const [viewMode, setViewMode] = useState("list"); // 'list', 'add', 'edit', 'view'
-  const [currentTrek, setCurrentTrek] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-=======
 // Components
 import Navbar from "./Components/Navbar";
 import HeroCarousel from "./Components/HeroCarousel";
@@ -18,7 +11,6 @@ import About from "./Pages/About";
 import Contact from "./Pages/Contact";
 import Availability from "./Pages/Availability";
 import Inbox from "./Pages/Inbox";
->>>>>>> 98ade1feba17d594f4fdb71e19874e73306d4f42
 
 // Admin Pages
 import AdminLogin from "./Components/AdminLogin";
@@ -82,9 +74,6 @@ function App() {
             <Route path="/blogs/:id" element={<BlogDetails />} />
             <Route path="/auth" element={<Auth onLogin={() => setIsUserLoggedIn(true)} />} />
 
-<<<<<<< HEAD
-export default AddPlace;
-=======
             {/* Admin Routes */}
             <Route
               path="/admin"
@@ -128,4 +117,3 @@ export default AddPlace;
 }
 
 export default App;
->>>>>>> 98ade1feba17d594f4fdb71e19874e73306d4f42

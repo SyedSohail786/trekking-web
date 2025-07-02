@@ -23,7 +23,7 @@ const Auth = ({ onLogin }) => {
     const url = isLogin ? "/api/users/login" : "/api/users/register";
 
     try {
-      const res = await axios.post(`${backendURL}+${url}`, form);
+      const res = await axios.post(`${backendURL}${url}`, form);
       toast.success(isLogin ? "Login successful" : "Registration successful");
       setUserLoggedIn(true, res.data.token);
       if (onLogin) onLogin();

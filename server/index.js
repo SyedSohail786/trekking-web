@@ -39,16 +39,15 @@ app.use("/api/users", authRoutes);
 // DB Connect
 mongoose.connect(process.env.MONGO_URI)
   .then(async () => {
-    console.log("MongoDB connected");
+    console.log("✅ MongoDB connected");
 
     const Admin = require("./App/Models/AdminUser");
-    const bcrypt = require('bcrypt');
     const existingAdmin = await Admin.findOne({ email: "admin@email.com" });
+
     if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash("admin@123", 10);
       const newAdmin = new Admin({
         email: "admin@email.com",
-        password: hashedPassword,
+        password: "admin@123", // plain password – will be hashed by pre-save
       });
 
       await newAdmin.save();
@@ -58,7 +57,7 @@ mongoose.connect(process.env.MONGO_URI)
     }
 
     app.listen(process.env.PORT, () => {
-      console.log("Server running",process.env.PORT)
+      console.log(`🚀 Server running on port ${process.env.PORT}`);
     });
   })
-  .catch((err) => console.error(err));
+  .catch((err) => console.error("MongoDB connection error:", err));

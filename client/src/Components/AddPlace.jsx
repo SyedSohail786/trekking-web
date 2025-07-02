@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-
+const  apribase = import.meta.env.VITE_BACKEND_URL;
 const AddPlace = () => {
   const [treks, setTreks] = useState([]);
   const [viewMode, setViewMode] = useState("list"); // 'list', 'add', 'edit', 'view'
@@ -12,7 +12,7 @@ const AddPlace = () => {
   const fetchTreks = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get("http://localhost:8000/api/places");
+      const res = await axios.get(`${apribase}/api/places`);
       setTreks(res.data);
     } catch (err) {
       toast.error("Failed to load treks");
@@ -29,7 +29,7 @@ const AddPlace = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this trek?")) {
       try {
-        await axios.delete(`http://localhost:8000/api/places/${id}`);
+        await axios.delete(`${apribase}/api/places/${id}`);
         toast.success("Trek deleted successfully");
         fetchTreks();
       } catch (err) {
@@ -42,10 +42,10 @@ const AddPlace = () => {
   const handleSubmit = async (formData) => {
     try {
       if (viewMode === "add") {
-        await axios.post("http://localhost:8000/api/places", formData);
+        await axios.post(`${apribase}/api/places`, formData);
         toast.success("Trek added successfully");
       } else {
-        await axios.put(`http://localhost:8000/api/places/${currentTrek._id}`, formData);
+        await axios.put(`${apribase}/api/places/${currentTrek._id}`, formData);
         toast.success("Trek updated successfully");
       }
       setViewMode("list");

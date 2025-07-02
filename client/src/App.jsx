@@ -23,7 +23,7 @@ import BlogsForUsers from "./Components/BlogsForUsers";
 import BlogDetails from "./Components/BlogDetails";
 import Auth from "./Components/Auth";
 import TrekDetails from "./Components/TrekDetails";
-import AddPlace from "./Components/AddPlace";
+import AddPlace from "./Components/AddPlace"
 
 function App() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);

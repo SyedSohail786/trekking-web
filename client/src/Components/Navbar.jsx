@@ -15,18 +15,19 @@ const Navbar = () => {
     isAdmin,
     isUserLoggedIn,
     logoutAdmin,
-    logoutUser
+    logoutUser,
+    checkAuthStatus
   } = useAuthStore();
   
-  const [adminStatus, setAdminStatus] = useState(isAdmin);
+  // Check auth status on mount and route change
   useEffect(() => {
-    setAdminStatus(isAdmin);
+    checkAuthStatus();
     setMobileMenuOpen(false); // Close menu on route change
-  }, [isAdmin, location]);
+  }, [location, checkAuthStatus]);
 
   const handleLogoutClick = () => {
-    navigate("/");
     logoutAdmin();
+    navigate("/");
   };
 
   const handleUserLogoutClick = () => {
@@ -37,10 +38,6 @@ const Navbar = () => {
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
-  const token = localStorage.getItem("adminToken");
-  useEffect(()=>{
-    if(token) setAdminStatus(true);
-  },[])
 
   return (
     <nav className="bg-gradient-to-r from-green-900 to-green-700 text-white shadow-lg sticky top-0 z-50">
@@ -55,7 +52,7 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-2">
-            {!adminStatus ? (
+            {!isAdmin ? (
               <>
                 <Link to="/" className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:text-yellow-200 hover:bg-green-700 transition-all duration-200">
                   <FaHome className="mr-2" />
@@ -86,10 +83,12 @@ const Navbar = () => {
                   </Link>
                 )}
 
-                <Link to="/admin" className="flex items-center bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                  <FaUserCog className="mr-2" />
-                  Admin
-                </Link>
+                {!isAdmin && (
+                  <Link to="/admin" className="flex items-center bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                    <FaUserCog className="mr-2" />
+                    Admin
+                  </Link>
+                )}
               </>
             ) : (
               <>
@@ -133,7 +132,7 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-green-800">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {!adminStatus ? (
+            {!isAdmin ? (
               <>
                 <Link to="/" onClick={toggleMobileMenu} className="flex items-center px-3 py-2 rounded-md text-base font-medium hover:text-yellow-200 hover:bg-green-700 block transition-all duration-200">
                   <FaHome className="mr-2" />
@@ -164,10 +163,12 @@ const Navbar = () => {
                   </Link>
                 )}
 
-                <Link to="/admin" onClick={toggleMobileMenu} className="flex items-center justify-center bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-2 rounded-lg font-medium transition-colors mt-2 w-full">
-                  <FaUserCog className="mr-2" />
-                  Admin
-                </Link>
+                {!isAdmin && (
+                  <Link to="/admin" onClick={toggleMobileMenu} className="flex items-center justify-center bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-2 rounded-lg font-medium transition-colors mt-2 w-full">
+                    <FaUserCog className="mr-2" />
+                    Admin
+                  </Link>
+                )}
               </>
             ) : (
               <>

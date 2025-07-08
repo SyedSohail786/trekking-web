@@ -35,7 +35,7 @@ const Inbox = () => {
 
     setDeletingId(id);
     try {
-      await axios.delete(`{backendURL}/api/messages/${id}`, {
+      await axios.delete(`${backendURL}/api/messages/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

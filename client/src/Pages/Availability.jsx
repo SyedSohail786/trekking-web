@@ -5,7 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import Cookies from "js-cookie";
-
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const Availability = () => {
   const [searchParams] = useSearchParams();
@@ -23,7 +23,7 @@ const Availability = () => {
     const fetchSlots = async () => {
       setIsLoading(true);
       try {
-        const res = await axios.get(`http://localhost:8000/api/slots?trekId=${trekId}&date=${date}`);
+        const res = await axios.get(`${backendURL}/api/slots?trekId=${trekId}&date=${date}`);
         setSlots(res.data);
         if (res.data.length > 0) setSlotId(res.data[0]._id);
       } catch {
@@ -38,7 +38,7 @@ const Availability = () => {
   const fetchSlots = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get(`http://localhost:8000/api/slots?trekId=${trekId}&date=${date}`);
+      const res = await axios.get(`${backendURL}/api/slots?trekId=${trekId}&date=${date}`);
       setSlots(res.data);
       if (res.data.length > 0) setSlotId(res.data[0]._id);
     } catch {
@@ -186,7 +186,7 @@ const Availability = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:8000/api/bookings", {
+      const res = await axios.post(`${backendURL}/api/bookings`, {
         trekId,
         slotId,
         date,

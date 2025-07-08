@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-const  apribase = import.meta.env.VITE_BACKEND_URL;
+
+const apribase = import.meta.env.VITE_BACKEND_URL;
+
 const AddPlace = () => {
   const [treks, setTreks] = useState([]);
-  const [viewMode, setViewMode] = useState("list"); // 'list', 'add', 'edit', 'view'
+  const [viewMode, setViewMode] = useState("list");
   const [currentTrek, setCurrentTrek] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch all treks
   const fetchTreks = async () => {
     setIsLoading(true);
     try {
@@ -25,7 +26,6 @@ const AddPlace = () => {
     fetchTreks();
   }, []);
 
-  // Handle delete trek
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this trek?")) {
       try {
@@ -38,20 +38,49 @@ const AddPlace = () => {
     }
   };
 
-  // Handle form submit (add/edit)
   const handleSubmit = async (formData) => {
     try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
+
+      const data = new FormData();
+      
+      // Append all form fields
+      data.append('title', formData.title);
+      data.append('location', formData.location);
+      data.append('description', formData.description);
+      
+      // Append image file if it exists
+      if (formData.imageFile) {
+        data.append('image', formData.imageFile);
+      }
+      
+      // Append arrays
+      formData.fullDetails.forEach((detail, index) => {
+        data.append(`fullDetails[${index}]`, detail);
+      });
+      
+      formData.stats.forEach((stat, index) => {
+        data.append(`stats[${index}][label]`, stat.label);
+        data.append(`stats[${index}][value]`, stat.value);
+      });
+
       if (viewMode === "add") {
-        await axios.post(`${apribase}/api/places`, formData);
+        await axios.post(`${apribase}/api/places`, data, config);
         toast.success("Trek added successfully");
       } else {
-        await axios.put(`${apribase}/api/places/${currentTrek._id}`, formData);
+        await axios.put(`${apribase}/api/places/${currentTrek._id}`, data, config);
         toast.success("Trek updated successfully");
       }
+      
       setViewMode("list");
       fetchTreks();
     } catch (err) {
       toast.error(`Failed to ${viewMode === "add" ? "add" : "update"} trek`);
+      console.error(err);
     }
   };
 
@@ -84,7 +113,6 @@ const AddPlace = () => {
   );
 };
 
-// Trek List Component
 const TrekList = ({ treks, isLoading, onAdd, onEdit, onView, onDelete }) => {
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -166,11 +194,9 @@ const TrekList = ({ treks, isLoading, onAdd, onEdit, onView, onDelete }) => {
   );
 };
 
-// Trek Form Component (for Add/Edit/View)
 const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
   const [form, setForm] = useState({
     title: "",
-    image: "",
     location: "",
     description: "",
     fullDetails: [""],
@@ -182,19 +208,17 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
 
-  // Initialize form with trekData when in edit/view mode
   useEffect(() => {
     if (mode !== "add" && trekData) {
       setForm({
         title: trekData.title || "",
-        image: trekData.image || "",
         location: trekData.location || "",
         description: trekData.description || "",
         fullDetails: trekData.fullDetails?.length ? trekData.fullDetails : [""],
         stats: trekData.stats?.length ? trekData.stats : [{ label: "", value: "" }],
         gallery: trekData.gallery?.length ? trekData.gallery : [""]
       });
-      if (trekData.image) setImagePreview(trekData.image);
+      if (trekData.image) setImagePreview(`${apribase}/${trekData.image}`);
     }
   }, [mode, trekData]);
 
@@ -227,7 +251,7 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
   };
 
   const handleGalleryChange = (e) => {
-    setGalleryFiles(e.target.files);
+    setGalleryFiles(Array.from(e.target.files));
   };
 
   const handleFormSubmit = async (e) => {
@@ -235,14 +259,12 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
     setIsSubmitting(true);
     
     try {
-      // In a real app, you would upload files here and get URLs
-      // For now, we'll just use the existing image if in edit mode
-      const finalData = {
+      const formData = {
         ...form,
-        image: imageFile ? URL.createObjectURL(imageFile) : form.image
+        imageFile: imageFile
       };
       
-      onSubmit(finalData);
+      await onSubmit(formData);
     } catch (err) {
       console.error("Error submitting form:", err);
     } finally {
@@ -259,7 +281,6 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
       </div>
 
       <form onSubmit={handleFormSubmit} className="p-6 space-y-6">
-        {/* Title */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Title*</label>
           <input
@@ -272,7 +293,6 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
           />
         </div>
 
-        {/* Main Image */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Banner Image*</label>
           {mode !== "view" ? (
@@ -295,10 +315,10 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
                   disabled={mode === "view"}
                 />
               </label>
-              {(imagePreview || form.image) && (
+              {(imagePreview) && (
                 <div className="w-24 h-24 rounded-lg overflow-hidden border border-gray-200">
                   <img 
-                    src={imagePreview || form.image} 
+                    src={imagePreview} 
                     alt="Preview" 
                     className="w-full h-full object-cover" 
                   />
@@ -307,16 +327,17 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
             </div>
           ) : (
             <div className="w-full h-48 rounded-lg overflow-hidden border border-gray-200">
-              <img 
-                src={form.image} 
-                alt="Trek" 
-                className="w-full h-full object-cover" 
-              />
+              {imagePreview && (
+                <img 
+                  src={imagePreview} 
+                  alt="Trek" 
+                  className="w-full h-full object-cover" 
+                />
+              )}
             </div>
           )}
         </div>
 
-        {/* Location */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Location*</label>
           <input
@@ -329,7 +350,6 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
           />
         </div>
 
-        {/* Description */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Short Description*</label>
           <textarea
@@ -343,7 +363,6 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
           />
         </div>
 
-        {/* Full Details - only show in view mode if there are details */}
         {(mode !== "view" || form.fullDetails.some(d => d.trim() !== "")) && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Full Details</label>
@@ -387,7 +406,6 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
           </div>
         )}
 
-        {/* Stats - only show in view mode if there are stats */}
         {(mode !== "view" || form.stats.some(s => s.label.trim() !== "" || s.value.trim() !== "")) && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Trek Statistics</label>
@@ -437,7 +455,6 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
           </div>
         )}
 
-        {/* Form Actions */}
         <div className="flex justify-end gap-3 pt-6">
           <button
             type="button"

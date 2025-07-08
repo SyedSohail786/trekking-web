@@ -37,6 +37,10 @@ const Navbar = () => {
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+  const token = localstorage.getItem("adminToken");
+  useEffect(()=>{
+    if(token) setAdminStatus(true);
+  },[])
 
   return (
     <nav className="bg-gradient-to-r from-green-900 to-green-700 text-white shadow-lg sticky top-0 z-50">

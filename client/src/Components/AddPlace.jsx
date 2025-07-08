@@ -218,7 +218,7 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
         stats: trekData.stats?.length ? trekData.stats : [{ label: "", value: "" }],
         gallery: trekData.gallery?.length ? trekData.gallery : [""]
       });
-      if (trekData.image) setImagePreview(`${apribase}/${trekData.image}`);
+      if (trekData.image) setImagePreview(`${trekData.image}`);
     }
   }, [mode, trekData]);
 

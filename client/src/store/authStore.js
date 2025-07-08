@@ -25,4 +25,13 @@ export const useAuthStore = create((set) => ({
     set({ isUserLoggedIn: false });
     Cookies.remove("token");
   },
+  checkAuthStatus: () => {
+    const adminToken = localStorage.getItem("adminToken");
+    const userToken = Cookies.get("token");
+    
+    set({ 
+      isAdmin: !!adminToken,
+      isUserLoggedIn: !!userToken
+    });
+  },
 }));

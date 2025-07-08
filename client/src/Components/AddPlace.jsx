@@ -181,7 +181,7 @@ const TrekList = ({ treks, isLoading, onAdd, onEdit, onView, onDelete }) => {
                     </div>
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>

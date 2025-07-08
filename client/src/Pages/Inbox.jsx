@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const Inbox = () => {
   const [messages, setMessages] = useState([]);
@@ -15,7 +16,7 @@ const Inbox = () => {
   const fetchMessages = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get("http://localhost:8000/api/messages", {
+      const res = await axios.get(`{backendURL}/api/messages`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -34,7 +35,7 @@ const Inbox = () => {
 
     setDeletingId(id);
     try {
-      await axios.delete(`http://localhost:8000/api/messages/${id}`, {
+      await axios.delete(`{backendURL}/api/messages/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

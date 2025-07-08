@@ -37,7 +37,7 @@ const Navbar = () => {
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
-  const token = localstorage.getItem("adminToken");
+  const token = localStorage.getItem("adminToken");
   useEffect(()=>{
     if(token) setAdminStatus(true);
   },[])

@@ -16,7 +16,7 @@ const Inbox = () => {
   const fetchMessages = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get(`{backendURL}/api/messages`, {
+      const res = await axios.get(`${backendURL}/api/messages`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

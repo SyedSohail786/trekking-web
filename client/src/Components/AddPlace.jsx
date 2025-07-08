@@ -47,18 +47,14 @@ const AddPlace = () => {
       };
 
       const data = new FormData();
-      
-      // Append all form fields
       data.append('title', formData.title);
       data.append('location', formData.location);
       data.append('description', formData.description);
       
-      // Append image file if it exists
       if (formData.imageFile) {
         data.append('image', formData.imageFile);
       }
       
-      // Append arrays
       formData.fullDetails.forEach((detail, index) => {
         data.append(`fullDetails[${index}]`, detail);
       });
@@ -185,7 +181,7 @@ const TrekList = ({ treks, isLoading, onAdd, onEdit, onView, onDelete }) => {
                     </div>
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -280,7 +276,7 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
         </h1>
       </div>
 
-      <form onSubmit={handleFormSubmit} className="p-6 space-y-6">
+      <form onSubmit={handleFormSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Title*</label>
           <input
@@ -296,14 +292,14 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Banner Image*</label>
           {mode !== "view" ? (
-            <div className="flex items-center gap-4">
-              <label className="flex flex-col items-center justify-center w-full max-w-xs border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
-                <div className="p-4 text-center">
+            <div className="space-y-4">
+              <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 p-4">
+                <div className="text-center">
                   <svg className="w-8 h-8 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
-                  <p className="text-sm text-gray-500">
-                    {imageFile ? imageFile.name : "Click to upload"}
+                  <p className="text-sm text-gray-500 mt-2">
+                    {imageFile ? imageFile.name : "Click to upload image"}
                   </p>
                 </div>
                 <input 
@@ -315,8 +311,8 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
                   disabled={mode === "view"}
                 />
               </label>
-              {(imagePreview) && (
-                <div className="w-24 h-24 rounded-lg overflow-hidden border border-gray-200">
+              {imagePreview && (
+                <div className="w-full h-48 rounded-lg overflow-hidden border border-gray-200">
                   <img 
                     src={imagePreview} 
                     alt="Preview" 
@@ -411,26 +407,30 @@ const TrekForm = ({ mode, trekData, onSubmit, onCancel }) => {
             <label className="block text-sm font-medium text-gray-700 mb-2">Trek Statistics</label>
             <div className="space-y-3">
               {form.stats.map((stat, i) => (
-                <div key={i} className="flex gap-3">
-                  <input
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                    placeholder="Label (e.g. Difficulty)"
-                    value={stat.label}
-                    onChange={(e) => handleArrayChange("stats", i, e.target.value, "label")}
-                    readOnly={mode === "view"}
-                  />
-                  <input
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                    placeholder="Value (e.g. Moderate)"
-                    value={stat.value}
-                    onChange={(e) => handleArrayChange("stats", i, e.target.value, "value")}
-                    readOnly={mode === "view"}
-                  />
+                <div key={i} className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex-1">
+                    <input
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      placeholder="Label (e.g. Difficulty)"
+                      value={stat.label}
+                      onChange={(e) => handleArrayChange("stats", i, e.target.value, "label")}
+                      readOnly={mode === "view"}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <input
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      placeholder="Value (e.g. Moderate)"
+                      value={stat.value}
+                      onChange={(e) => handleArrayChange("stats", i, e.target.value, "value")}
+                      readOnly={mode === "view"}
+                    />
+                  </div>
                   {mode !== "view" && (
                     <button
                       type="button"
                       onClick={() => removeFromArray("stats", i)}
-                      className="self-center p-2 text-red-500 hover:text-red-700"
+                      className="self-center p-2 text-red-500 hover:text-red-700 sm:self-auto"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

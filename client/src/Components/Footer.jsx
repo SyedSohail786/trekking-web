@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="text-center md:text-left">
           <h2 className="text-lg font-semibold">Aranya Vihaara</h2>
           <p className="text-sm text-gray-300">© {new Date().getFullYear()}Aranya Vihaara. All rights reserved.</p>
-{/*           <p className="text-sm text-gray-300 font-bold">Developed By Syed Sohail with ❤️</p> */}
+          <p className="text-sm text-gray-300 font-bold">Developed By Syed Sohail with ❤️</p>
         </div>
 
         <div className="flex space-x-4">
